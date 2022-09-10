@@ -35,7 +35,7 @@ navigator.mediaDevices.getUserMedia({
 
 //Initializing socket and peer js connections to server
 //using index script tags for getting packages
-const socket = io.connect("http://localhost:8000")
+const socket = io.connect(location.origin)
 const peer = new Peer(undefined, {
     host: "localhost",
     port: 8000,
