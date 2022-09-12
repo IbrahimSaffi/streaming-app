@@ -1,3 +1,11 @@
+console.log(location.host,location.hostname)
+const socket = io.connect(location.host)
+const peer = new Peer(undefined, {
+    host: location.hostname,
+    port: 8000,
+    path: "/peerjs",
+})
+console.log(peer);
 const videoEl = document.querySelector(".stream");
 navigator.mediaDevices.getUserMedia({
     video: true,
@@ -14,9 +22,9 @@ navigator.mediaDevices.getUserMedia({
     })
     //Upon recieving "user-add" event from server
     socket.on("user-add", (newPeerId) => {
-        let conn = peer.connect(newPeerId)
+        // let conn = peer.connect(newPeerId)
         console.log("hi from " + peer.id)
-        setTimeout(()=>{
+        // setTimeout(()=>{
             let call = peer.call(newPeerId,stream);
             console.log(call)
             call.on("stream",(remoteStream)=>{
@@ -28,26 +36,22 @@ navigator.mediaDevices.getUserMedia({
                 })
                 document.body.appendChild(newVideo)
             })
-        },1000)
+        // },500)
     })
 })
 .catch((err)=>console.log("Error retrieving webcam"));
 
 //Initializing socket and peer js connections to server
 //using index script tags for getting packages
-const socket = io.connect(location.origin)
-const peer = new Peer(undefined, {
-    host: "localhost",
-    port: 8000,
-    path: "/peerjs",
-})
-console.log(peer);
 
 
 //When peer connection is opened from server
 peer.on("open", (id) => {
     //Sending "new-connection" event to server from Front end
-    socket.emit("new-connection", peer.id);
+    setTimeout(()=>{
+        socket.emit("new-connection", peer.id);
+
+    },500)
     console.log("Peer ID", id)
 })
 

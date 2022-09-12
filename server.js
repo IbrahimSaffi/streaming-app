@@ -7,7 +7,7 @@ const {Server} = require("socket.io")
 const app = express()
 
 //Initializing express/node server
-const httpServer = app.listen(process.env.PORT || 8000);
+const httpServer = app.listen(process.env.PORT||8000);
 
 //Middleware use
 app.use(cors());
@@ -20,7 +20,7 @@ app.get("/",(req,res)=>{
     res.render("index")
 })
 //Initallizing peer server
-const peerServer = new ExpressPeerServer(httpServer, { debug : true })
+const peerServer = new ExpressPeerServer(httpServer, { debug : true ,})
 peerServer.on("connection",(client)=>{
    console.log(`${client.id} connected`)
 })
@@ -34,6 +34,6 @@ io.on("connection",(socket)=>{
     socket.on("new-connection",(peerId)=>{
         console.log("new connection request")
         //sending "user-add" event to frontEnd
-        socket.emit("user-add",peerId)
+        socket.broadcast.emit("user-add",peerId)
     })
 })
