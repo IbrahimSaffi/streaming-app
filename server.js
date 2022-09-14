@@ -34,6 +34,6 @@ io.on("connection",(socket)=>{
     socket.on("new-connection",(peerId)=>{
         console.log("new connection request")
         //sending "user-add" event to frontEnd
-        socket.broadcast.emit("user-add",peerId)
+        socket.emit("user-add",peerId)
     })
 })

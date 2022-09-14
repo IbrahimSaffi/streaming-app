@@ -9,7 +9,7 @@ console.log(peer);
 const videoEl = document.querySelector(".stream");
 navigator.mediaDevices.getUserMedia({
     video: true,
-    audio: true,
+    // audio: true,
 }).then(stream => {
     videoEl.srcObject = stream;
     videoEl.addEventListener("loadedmetadata", () => {
@@ -19,8 +19,16 @@ navigator.mediaDevices.getUserMedia({
      peer.on("call",(call)=>{
         console.log("getting call")
         call.answer(stream)
+        call.on("stream",(remoteStream)=>{
+            console.log("here")
+            let newVideo = document.createElement("video");
+            newVideo.srcObject = remoteStream;
+            newVideo.addEventListener("loadedmetadata",()=>{
+                newVideo.play()
+            })
+            document.body.appendChild(newVideo)
+        })
     })
-    //Upon recieving "user-add" event from server
     socket.on("user-add", (newPeerId) => {
         // let conn = peer.connect(newPeerId)
         console.log("hi from " + peer.id)
@@ -38,6 +46,7 @@ navigator.mediaDevices.getUserMedia({
             })
         // },500)
     })
+    //Upon recieving "user-add" event from server
 })
 .catch((err)=>console.log("Error retrieving webcam"));
 
